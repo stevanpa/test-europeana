@@ -1,16 +1,20 @@
 package org.europeana.testeuropeana.controller
 
+import org.europeana.testeuropeana.service.CalculateService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/rest")
-class RestController {
+class RestController @Autowired constructor(
+    var service: CalculateService
+) {
 
     var log: Logger = LoggerFactory.getLogger(RestController::class.java)
+
 
     @GetMapping("/ping")
     fun ping(): String {
@@ -19,13 +23,21 @@ class RestController {
         return "pong"
     }
 
-    @GetMapping("/upper/{value}")
-    fun setUpperValue(value: Int) {
+    @PostMapping("/upper/{value}")
+    fun setUpperValue(@PathVariable value: Long): Long {
         log.info("Set upper value: $value")
+
+        val resultEntity = service.save(value)
+
+        log.info("Saved ResultEntity: $resultEntity")
+
+        return resultEntity.upperNumber
     }
 
-    @GetMapping("/calculate")
-    fun calculate() {
+    @GetMapping("/calculate/{value}")
+    fun calculate(@PathVariable value: Long) {
         log.info("Calculate result")
+
+        service.calculate(value)
     }
 }
