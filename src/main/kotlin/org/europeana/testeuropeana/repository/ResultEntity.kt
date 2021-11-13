@@ -10,7 +10,8 @@ data class ResultEntity (
 
     @Id @GeneratedValue var id: Long? = null,
     var upperNumber: Long,
-    var smallestPositiveNumber: Long? = null
+    var smallestPositiveNumber: Long? = null,
+    var measureTimeMillis: Long? = null
 
 ) {
     override fun equals(other: Any?): Boolean {

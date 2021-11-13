@@ -15,7 +15,7 @@ class CalculateService @Autowired constructor(
 
     var log: Logger = LoggerFactory.getLogger(CalculateService::class.java)
 
-    fun calculate(upperNumber: Long) {
+    fun calculate(upperNumber: Long): ResultEntity {
         var resultEntity = repository.findByUpperNumber(upperNumber)
 
         if (resultEntity == null) {
@@ -24,36 +24,44 @@ class CalculateService @Autowired constructor(
 
         if (resultEntity.smallestPositiveNumber == null) {
 
-            val x = resultEntity.upperNumber
-            var smallestNumber = resultEntity.upperNumber
-            val result = arrayOfNulls<Boolean>(x.toInt())
-
             val elapsed = measureTimeMillis {
-                while (result.contains(false) || result.contains(null)) {
-                    doWhile(result, smallestNumber, x)
-                    smallestNumber += 1
-                }
+                synchronousProcessing(resultEntity)
             }
-
-            resultEntity.smallestPositiveNumber = smallestNumber -1
 
             log.info("Elapsed time: $elapsed ms and Result: ${resultEntity.smallestPositiveNumber} \n")
 
+            resultEntity.measureTimeMillis = elapsed
+            repository.save(resultEntity)
         }
+
+        return resultEntity
     }
 
-    private fun doWhile(result: Array<Boolean?>, smallestNumber: Long, x: Long) {
-        var xD = x
-        var index = x
-        while (index > 0 ) {
-            index -= 1
-            if ((smallestNumber % xD) != 0L) {
-                result[index.toInt()] = (smallestNumber % xD) == 0L
+    private fun synchronousProcessing(resultEntity: ResultEntity) {
+        val x = resultEntity.upperNumber
+        var smallestNumber = resultEntity.upperNumber.toInt()
+        val result = arrayOfNulls<Boolean>(x.toInt())
+
+        while (result.contains(false) || result.contains(null)) {
+            doWhile(result, smallestNumber, x.toInt(), 1L, x)
+            smallestNumber += 1
+        }
+
+        resultEntity.smallestPositiveNumber = (smallestNumber - 1).toLong()
+    }
+
+    private fun doWhile(result: Array<Boolean?>, smallestNumber: Int, size: Int, start: Long, end: Long) {
+        var index = 0
+        var divider = start
+        while (index < size && divider <= end) {
+            if ((smallestNumber % divider) != 0L) {
+                result[index] = false
                 break
             } else {
-                result[index.toInt()] = (smallestNumber % xD) == 0L
+                result[index] = true
             }
-            xD -= 1
+            index += 1
+            divider += 1
         }
     }
 

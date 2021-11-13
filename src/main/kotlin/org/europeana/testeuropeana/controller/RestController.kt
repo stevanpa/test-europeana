@@ -1,5 +1,6 @@
 package org.europeana.testeuropeana.controller
 
+import org.europeana.testeuropeana.repository.ResultEntity
 import org.europeana.testeuropeana.service.CalculateService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -35,9 +36,9 @@ class RestController @Autowired constructor(
     }
 
     @GetMapping("/calculate/{value}")
-    fun calculate(@PathVariable value: Long) {
+    fun calculate(@PathVariable value: Long): ResultEntity {
         log.info("Calculate result")
 
-        service.calculate(value)
+        return service.calculate(value)
     }
 }
