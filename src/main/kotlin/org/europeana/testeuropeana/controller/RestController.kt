@@ -5,6 +5,7 @@ import org.europeana.testeuropeana.service.CalculateService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RestController
 
@@ -35,9 +36,14 @@ class RestController @Autowired constructor(
         return resultEntity.upperNumber
     }
 
-    @GetMapping("/calculate/{value}")
+    @GetMapping(
+        path = ["/calculate/{value}"],
+        produces = [ MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE,
+            MediaType.TEXT_XML_VALUE ] )
+    @ResponseBody
     fun calculate(@PathVariable value: Long): ResultEntity {
-        log.info("Calculate result")
+        log.info("Calculate result for value: $value")
 
         return service.calculate(value)
     }

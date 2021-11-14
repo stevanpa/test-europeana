@@ -9,7 +9,7 @@ import javax.persistence.Id
 data class ResultEntity (
 
     @Id @GeneratedValue var id: Long? = null,
-    var upperNumber: Long,
+    var upperNumber: Long = -1,
     var smallestPositiveNumber: Long? = null,
     var measureTimeMillis: Long? = null
 

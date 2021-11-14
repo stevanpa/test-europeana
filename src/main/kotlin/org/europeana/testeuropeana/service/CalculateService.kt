@@ -20,6 +20,7 @@ class CalculateService @Autowired constructor(
 
         if (resultEntity == null) {
             resultEntity = save(upperNumber)
+            log.info("Result already calculated for: ${resultEntity.smallestPositiveNumber} \n")
         }
 
         if (resultEntity.smallestPositiveNumber == null) {
@@ -66,14 +67,7 @@ class CalculateService @Autowired constructor(
     }
 
     fun save(upperNumber: Long): ResultEntity {
-
-        val resultEntity = ResultEntity(
-            id = null,
-            upperNumber = upperNumber,
-            smallestPositiveNumber = null)
-
-        repository.save(resultEntity)
-
-        return resultEntity
+        val resultEntity = ResultEntity(upperNumber = upperNumber)
+        return repository.save(resultEntity)
     }
 }
