@@ -3,7 +3,6 @@ package org.europeana.testeuropeana.controller
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
-import org.europeana.testeuropeana.controller.RestController
 import org.europeana.testeuropeana.repository.ResultEntity
 import org.europeana.testeuropeana.service.CalculateService
 import org.junit.jupiter.api.BeforeEach

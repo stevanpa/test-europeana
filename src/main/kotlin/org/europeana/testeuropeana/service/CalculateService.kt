@@ -20,7 +20,6 @@ class CalculateService @Autowired constructor(
 
         if (resultEntity == null) {
             resultEntity = save(upperNumber)
-            log.info("Result already calculated for: ${resultEntity.smallestPositiveNumber} \n")
         }
 
         if (resultEntity.smallestPositiveNumber == null) {
@@ -33,6 +32,8 @@ class CalculateService @Autowired constructor(
 
             resultEntity.measureTimeMillis = elapsed
             repository.save(resultEntity)
+        } else {
+            log.info("Result already calculated for: ${resultEntity.upperNumber}. Returning value from DB $resultEntity\n")
         }
 
         return resultEntity
