@@ -40,12 +40,12 @@ class CalculateService @Autowired constructor(
     }
 
     private fun synchronousProcessing(resultEntity: ResultEntity) {
-        val x = resultEntity.upperNumber
+        val upperNumber = resultEntity.upperNumber
         var smallestNumber = resultEntity.upperNumber.toInt()
-        val result = arrayOfNulls<Boolean>(x.toInt())
+        val result = arrayOfNulls<Boolean>(upperNumber.toInt())
 
         while (result.contains(false) || result.contains(null)) {
-            doWhile(result, smallestNumber, x.toInt(), 1L, x)
+            doWhile(result, smallestNumber, upperNumber.toInt(), 1L, upperNumber)
             smallestNumber += 1
         }
 
